@@ -18,19 +18,19 @@ Final sample: **26,534 restaurants, 845 shutdown events (3.2 percent)**.
 
 ### Kaplan-Meier Curves
 
-![Overall survival curve](figures/km_overall.png)
+![Overall survival curve](images/survival_curve_1.png)
 
 The overall curve starts at 1.0 and drops only about 4 percentage points before flattening. That small drop is the roughly 3 percent event rate, and the flat top is the 96 percent of restaurants that are never shut down. Almost all of the decline happens in the first 1,000 days. The flat tail past that point is an artifact of the 3 year data window, not evidence that older restaurants are safe.
 
-![Survival by borough](figures/km_borough.png)
+![Survival by borough](images/survival_curve_2.png)
 
 Splitting by borough shows clear separation: Brooklyn restaurants are shut down fastest, Manhattan and Staten Island slowest. A pairwise log rank test confirms the differences are statistically real (p below 0.001 for several pairs). This is unadjusted, so it does not yet tell us whether borough itself matters or whether it is standing in for something else.
 
-![Survival by cuisine](figures/km_cuisine.png)
+![Survival by cuisine](images/survival_curve_3.png)
 
 Splitting by cuisine produces the sharpest separation in the project. Caribbean and Chinese restaurants drop well below Italian and Donuts. These raw curves motivate the modeling but are still unadjusted, so the Cox model is needed to isolate the cuisine effect from confounds like borough and inspection score.
 
-### 2. Inferential: Cox proportional hazards
+### Cox proportional hazards
 
 Fitting all features together isolates each effect. Cuisine is the dominant predictor, significant even after controlling for inspection score and borough.
 
@@ -70,9 +70,6 @@ A Random Survival Forest makes no proportional hazards assumption and can captur
 
 Calibration checks whether predicted probabilities match reality: when the model says 20 percent, does it happen about 20 percent of the time. The smoothed calibration curve tracks the diagonal closely (ICI 0.005, E50 0.004), with only mild overestimation at the high risk tail where data is sparse. The model is well calibrated, so its outputs can be used as absolute risk estimates, not just relative rankings. This is what justifies serving real probabilities from the API.
 
-## Deployment
-
-The final model is served as a FastAPI risk scoring app. A POST request to /predict takes a restaurant's features and returns a risk score plus shutdown probabilities at 6 month, 1 year, and 2 year horizons.
 
 ## Limitations
 
@@ -82,4 +79,4 @@ The final model is served as a FastAPI risk scoring app. A POST request to /pred
 
 **Association, not causation.** Cuisine hazard ratios likely proxy for unmeasured factors such as restaurant size, chain status, neighborhood, and enforcement patterns.
 
-**Stack:** Python · pandas · lifelines · scikit-survival · matplotlib · FastAPI
+**Stack:** Python · pandas · lifelines · scikit-survival · matplotlib 
