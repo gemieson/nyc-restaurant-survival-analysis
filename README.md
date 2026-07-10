@@ -16,9 +16,7 @@ Final sample: **26,534 restaurants, 845 shutdown events (3.2 percent)**.
 
 ## Analysis and findings
 
-The analysis moves through a deliberate progression: describe the raw patterns, model them, validate the model, benchmark it, and validate its predictions.
-
-### 1. Descriptive: Kaplan-Meier curves
+### Kaplan-Meier Curves
 
 ![Overall survival curve](figures/km_overall.png)
 
